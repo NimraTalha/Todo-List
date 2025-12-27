@@ -1,0 +1,2 @@
+# No external dependencies for Phase I - only core Python standard library
+# This is a simple CLI app with no external dependencies beyond Python 3.13+
