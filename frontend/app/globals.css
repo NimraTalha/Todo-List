@@ -6,6 +6,18 @@
   --foreground-rgb: 0, 0, 0;
   --background-start-rgb: 214, 219, 220;
   --background-end-rgb: 255, 255, 255;
+  --card-bg-rgb: 255, 255, 255;
+  --navbar-bg-rgb: 255, 255, 255;
+  --footer-bg-rgb: 249, 250, 251;
+}
+
+.dark {
+  --foreground-rgb: 255, 255, 255;
+  --background-start-rgb: 17, 24, 39;
+  --background-end-rgb: 31, 41, 55;
+  --card-bg-rgb: 30, 41, 59;
+  --navbar-bg-rgb: 17, 24, 39;
+  --footer-bg-rgb: 31, 41, 55;
 }
 
 body {
