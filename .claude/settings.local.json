@@ -38,7 +38,10 @@
       "Bash(powershell \"Stop-Process -Id 3216 -Force\")",
       "Bash(curl http://localhost:8001/)",
       "Bash(dir:*)",
-      "Bash(python -m src.todo_app)"
+      "Bash(python -m src.todo_app)",
+      "Bash(git rm -r --cached frontend/node_modules)",
+      "Bash(del nul)",
+      "Bash(powershell -Command \"Remove-Item nul -Force\")"
     ]
   }
 }
