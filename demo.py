@@ -1,50 +1,65 @@
-#!/usr/bin/env python3
 """
-Demo script to showcase the Todo CLI application functionality.
+Demo script for the Todo CLI Application
+This script demonstrates all the main features of the application.
 """
-import sys
-import os
-sys.path.insert(0, os.path.join(os.path.dirname(__file__), 'src'))
+from src.todo_app import TodoList
 
-from task import Task
-from todolist import TodoList
 
 def demo():
-    print("Todo CLI Application Demo")
-    print("=" * 30)
+    print("=== Todo App Demo ===\n")
     
     # Create a new todo list
     todo_list = TodoList()
     
-    print("\n1. Adding tasks:")
-    task1 = todo_list.add_task("Buy groceries", "Milk, bread, eggs")
-    print(f"   {task1}")
+    # Demo: Add tasks
+    print("1. Adding tasks...")
+    task1 = todo_list.add_task("Buy groceries", "Get milk, bread, and eggs")
+    task2 = todo_list.add_task("Walk the dog", "Take Fido to the park")
+    task3 = todo_list.add_task("Finish report", "Complete the quarterly report")
+    print(f"   Added: {task1}")
+    print(f"   Added: {task2}")
+    print(f"   Added: {task3}\n")
     
-    task2 = todo_list.add_task("Clean house", "Weekly cleaning routine")
-    print(f"   {task2}")
-    
-    print(f"\n2. Current tasks ({len(todo_list.list_tasks())} total):")
-    for task in todo_list.list_tasks():
-        print(f"   {task.details()}")
-    
-    print("\n3. Updating a task:")
-    todo_list.update_task(1, title="Buy groceries and cook", description="Get ingredients for dinner")
-    updated_task = todo_list.get_task(1)
-    print(f"   Updated: {updated_task}")
-    
-    print("\n4. Marking a task as complete:")
-    todo_list.mark_complete(1)
-    completed_task = todo_list.get_task(1)
-    print(f"   {completed_task}")
-    
-    print("\n5. Deleting a task:")
-    todo_list.delete_task(2)
-    remaining_tasks = todo_list.list_tasks()
-    print(f"   Remaining tasks: {len(remaining_tasks)}")
-    for task in remaining_tasks:
+    # Demo: View all tasks
+    print("2. Viewing all tasks...")
+    for task in todo_list.get_all_tasks():
         print(f"   {task}")
+    print()
     
-    print("\nDemo completed successfully!")
+    # Demo: Mark a task as complete
+    print("3. Marking a task as complete...")
+    todo_list.mark_task_complete(task1.id, True)
+    print(f"   Marked task {task1.id} as complete: {task1}\n")
+    
+    # Demo: Update a task
+    print("4. Updating a task...")
+    todo_list.update_task(task2.id, "Walk the dog", "Take Fido to the park for 30 minutes")
+    updated_task = todo_list.get_task(task2.id)
+    print(f"   Updated task {task2.id}: {updated_task}\n")
+    
+    # Demo: View all tasks again to see changes
+    print("5. Viewing all tasks after updates...")
+    for task in todo_list.get_all_tasks():
+        print(f"   {task}")
+    print()
+    
+    # Demo: Delete a task
+    print("6. Deleting a task...")
+    success = todo_list.delete_task(task3.id)
+    if success:
+        print(f"   Deleted task with ID {task3.id}")
+    else:
+        print(f"   Failed to delete task with ID {task3.id}")
+    
+    # View final list
+    print("\n7. Final task list...")
+    for task in todo_list.get_all_tasks():
+        print(f"   {task}")
+    if not todo_list.get_all_tasks():
+        print("   No tasks remaining.")
+    
+    print("\n=== Demo completed ===")
+
 
 if __name__ == "__main__":
     demo()

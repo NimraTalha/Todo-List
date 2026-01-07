@@ -1,90 +1,126 @@
-# Todo CLI App
+# Todo Application - Full Stack Implementation
 
-This is a simple command-line todo application that stores tasks in memory. It's part of the "Evolution of Todo" hackathon project, demonstrating the progression from CLI to distributed cloud-native AI systems.
-
-## Setup Instructions
-
-### Prerequisites
-- Python 3.13+
-- UV package manager (optional, for virtual environment management)
-
-### Windows Users
-Windows users must use WSL 2 (Windows Subsystem for Linux) for development:
-```bash
-# Install WSL 2
-wsl --install
-
-# Set WSL 2 as default
-wsl --set-default-version 2
-
-# Install Ubuntu
-wsl --install -d Ubuntu-22.04
-```
-
-### Installation
-1. Clone the repository
-2. Navigate to the project directory
-3. (Optional) Create a virtual environment using UV:
-   ```bash
-   uv venv
-   source .venv/bin/activate  # On Windows WSL: source .venv/Scripts/activate
-   ```
-
-### Running the Application
-To run the application:
-```bash
-cd src
-python main.py
-```
+A complete full-stack todo application with CLI, web frontend, and FastAPI backend integrated with Neon PostgreSQL.
 
 ## Features
 
-The application supports the following commands:
+1. **CLI Application** – Interactive command-line interface with advanced task management
+2. **Web Frontend** – Modern Next.js interface for task management
+3. **FastAPI Backend** – Robust API with Neon PostgreSQL integration
+4. **User Authentication** – JWT-based authentication with Better Auth
+5. **Task CRUD Operations** – Complete task management with filtering and sorting
+6. **Data Persistence** – Secure database storage with user isolation
 
-- `add <title> [description]` - Add a new task
-- `delete <id>` - Delete a task by ID
-- `update <id> [title=...] [desc=...]` - Update task title or description
-- `list` (or `view`) - List all tasks
-- `complete <id>` - Mark task as complete
-- `incomplete <id>` - Mark task as incomplete
-- `help` - Show available commands
-- `quit` - Exit the application
+## Project Phases
 
-## Example Usage
+### Phase I: CLI Application
+- In-memory todo application with basic CRUD operations
+- Advanced features: due dates, priorities, tags, recurrence, search, notifications
 
-```
-> add Buy groceries
-Task added: ID=1 Title=Buy groceries
+### Phase II: Full-Stack Web Application
+- **Backend**: FastAPI with SQLModel and Neon PostgreSQL
+- **Frontend**: Next.js 16+ with TypeScript and Tailwind CSS
+- **Authentication**: Better Auth with JWT
+- **API Integration**: Secure REST API endpoints with user isolation
 
-> add Clean house Weekly cleaning routine
-Task added: ID=2 Title=Clean house
+## Backend Implementation
 
-> list
-ID: 1 [ ] Title: Buy groceries
-   Description: 
-ID: 2 [ ] Title: Clean house
-   Description: Weekly cleaning routine
+### Features Implemented
 
-> complete 1
-Task 1 marked as complete
+- **Task CRUD Operations**: Create, read, update, delete, and toggle completion status for tasks
+- **User Authentication**: JWT-based authentication with Better Auth integration
+- **Database Integration**: Neon Serverless PostgreSQL with SQLModel ORM
+- **User Isolation**: Each user can only access their own tasks
+- **API Endpoints**: RESTful API with proper error handling
 
-> list
-ID: 1 [x] Title: Buy groceries
-   Description: 
-ID: 2 [ ] Title: Clean house
-   Description: Weekly cleaning routine
+### Database Schema
 
-> quit
-Goodbye!
-```
+- **users** table:
+  - `id` (string, primary key)
+  - `email` (string, unique)
+  - `name` (string)
+  - `created_at` (timestamp)
+
+- **tasks** table:
+  - `id` (integer, primary key)
+  - `user_id` (string, foreign key -> users.id)
+  - `title` (string, not null)
+  - `description` (text, nullable)
+  - `completed` (boolean, default false)
+  - `created_at` (timestamp)
+  - `updated_at` (timestamp)
+
+### API Endpoints
+
+All endpoints require JWT token in header: `Authorization: Bearer <token>`
+
+- `GET /api/tasks` - List all tasks for authenticated user
+  - Query Parameters: `status` ("all"|"pending"|"completed"), `sort` ("created"|"title")
+- `POST /api/tasks` - Create a new task
+- `GET /api/tasks/{id}` - Get single task
+- `PUT /api/tasks/{id}` - Update task
+- `DELETE /api/tasks/{id}` - Delete task
+- `PATCH /api/tasks/{id}/complete` - Toggle completion status
+
+### Running the Backend
+
+1. Install dependencies:
+   ```bash
+   pip install -r requirements.txt
+   ```
+
+2. Set up environment variables in `.env` file:
+   ```env
+   BETTER_AUTH_SECRET=your_shared_secret_here
+   DATABASE_URL=postgresql://user:pass@neon-host:5432/db_name
+   NEXTAUTH_URL=http://localhost:3000
+   ```
+
+3. Run the server:
+   ```bash
+   python main.py
+   ```
+
+The backend will be available at `http://localhost:8000`
+
+### Frontend Integration
+
+The backend is designed to work seamlessly with the frontend running at `http://localhost:3000`, with proper CORS configuration and JWT authentication flow.
+
+## CLI Application Usage
+
+When you run the CLI application, you'll enter an interactive loop. Available commands:
+
+- `add` - Add a new task (with optional due date, priority, tags, recurrence, and due datetime)
+- `delete` - Delete a task by ID
+- `update` - Update a task by ID (with optional due date, priority, tags, recurrence, and due datetime)
+- `list` or `ls` - View all tasks (with optional filtering and sorting)
+- `search` - Search tasks by keyword
+- `remind` - Show reminder for a specific task with browser notification
+- `complete` - Mark a task as complete (auto-generates new recurring tasks if applicable)
+- `incomplete` - Mark a task as incomplete
+- `quit` or `exit` - Exit the application
 
 ## Project Structure
 
-- `src/` - Contains all Python source code
-  - `main.py` - Entry point of the application
-  - `cli.py` - Command-line interface implementation
-  - `todolist.py` - Todo list management
-  - `task.py` - Task model definition
-- `specs/` - Contains specification files
-- `requirements.txt` - Project dependencies (none beyond standard library)
+- `src/backend/` - FastAPI backend implementation
+- `src/todo_app.py` - CLI application code
+- `test_todo_app.py` - Unit tests for all features
+- `specs/` - Specification files
 - `README.md` - This file
+
+## Development
+
+### Running Tests
+
+```bash
+python -m unittest test_todo_app.py -v
+```
+
+### Code Standards
+
+- PEP 8 compliant
+- Full type hints
+- Comprehensive docstrings
+- Defensive programming practices
+- User-friendly messages
