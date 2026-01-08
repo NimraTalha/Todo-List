@@ -299,6 +299,12 @@ def toggle_task_completion(task_id: int):
         "updated_at": updated_task.created_at.isoformat()
     }
 
+# For Vercel deployment, make sure the FastAPI app is available as 'app'
+# This allows Vercel's Python runtime to properly serve the application
 if __name__ == "__main__":
     import uvicorn
     uvicorn.run(app, host="0.0.0.0", port=8000)
+
+# For Vercel Python Serverless Functions
+# The app object is what Vercel will use to serve the API
+handler = app
